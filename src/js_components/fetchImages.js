@@ -7,24 +7,28 @@ import axios from 'axios';
 const API_KEY = '26860681-a6fc642b676e1a9ee24890c43';
 const BASE_URL = 'https://pixabay.com/api/';
 
-export async function getImages(name) {
-  const searchParameters = {
-    key: API_KEY,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: 'true',
-    q: `${name}`,
-    per_page: '40',
-  };
+export default class ImagesApiService {
+  constructor() {
+    this.page = 1;
+    this.query = '';
+  }
+  async getImages() {
+    const searchParameters = {
+      key: API_KEY,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: 'true',
+      q: `${this.query}`,
+      per_page: '40',
+      page: `${this.page}`,
+    };
+    this.page += 1;
+    return await axios.get(`${BASE_URL}`, {
+      params: searchParameters,
+    });
+  }
 
-  return await axios.get(`${BASE_URL}`, {
-    params: searchParameters,
-  });
+  resetPage() {
+    this.page = 1;
+  }
 }
-
-// function loadMoreImages(name) {
-//   if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
-//     getImages(name);
-//     console.log('woah');
-//   }
-// }
