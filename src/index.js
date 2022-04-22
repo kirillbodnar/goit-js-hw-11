@@ -33,7 +33,7 @@ function onSubmit(e) {
 }
 
 function loadMoreImagesOnScroll() {
-  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
+  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10) {
     imagesApiService.getImages().then(image => {
       endOfImagesNotification(image);
       appendCardMarkUp(image.data.hits);
@@ -97,7 +97,7 @@ function noImagesFoundNotification(image) {
 
 function moveScreenOnScroll() {
   window.scrollTo({
-    top: window.scrollY + 600,
+    top: window.scrollY + 500,
     behavior: 'smooth',
   });
 }
