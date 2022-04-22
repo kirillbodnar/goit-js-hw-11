@@ -3,7 +3,7 @@ import ImagesApiService from './js_components/fetchImages';
 import { Notify } from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 
 const imagesApiService = new ImagesApiService();
 
@@ -21,8 +21,8 @@ let lightbox = new SimpleLightbox('.gallery a', {
 refs.form.addEventListener('submit', onSubmit);
 
 function onSubmit(e) {
+  window.addEventListener('scroll', throttle(loadMoreImagesOnScroll, 1000));
   e.preventDefault();
-  window.addEventListener('scroll', debounce(loadMoreImagesOnScroll, 400));
   clearGallery();
   imagesApiService.resetPage();
   imagesApiService.query = refs.input.value;
