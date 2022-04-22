@@ -37,6 +37,7 @@ function loadMoreImagesOnScroll() {
     imagesApiService.getImages().then(image => {
       endOfImagesNotification(image);
       appendCardMarkUp(image.data.hits);
+      moveScreenOnScroll();
       lightbox.refresh();
     });
   }
@@ -92,4 +93,11 @@ function noImagesFoundNotification(image) {
       'Sorry, there are no images matching your search query. Please try again.',
     );
   }
+}
+
+function moveScreenOnScroll() {
+  window.scrollTo({
+    top: window.scrollY + 600,
+    behavior: 'smooth',
+  });
 }
