@@ -7,6 +7,8 @@ import throttle from 'lodash.throttle';
 
 const imagesApiService = new ImagesApiService();
 
+Notify.init({ showOnlyTheLastOne: true });
+
 const refs = {
   form: document.querySelector('.search-form'),
   input: document.querySelector('.search-form__input'),
