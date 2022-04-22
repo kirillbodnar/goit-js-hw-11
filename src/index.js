@@ -83,6 +83,7 @@ function clearGallery() {
 
 function endOfImagesNotification(image) {
   if (image.data.hits.length === 0) {
+    window.removeEventListener('scroll', loadMoreImagesOnScroll);
     return Notify.warning("We're sorry, but you've reached the end of search results.");
   }
 }
