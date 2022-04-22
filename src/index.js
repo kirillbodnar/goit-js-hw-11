@@ -22,7 +22,7 @@ refs.form.addEventListener('submit', onSubmit);
 
 function onSubmit(e) {
   e.preventDefault();
-  window.addEventListener('scroll', debounce(loadMoreImagesOnScroll, 300));
+  window.addEventListener('scroll', debounce(loadMoreImagesOnScroll, 400));
   clearGallery();
   imagesApiService.resetPage();
   imagesApiService.query = refs.input.value;
