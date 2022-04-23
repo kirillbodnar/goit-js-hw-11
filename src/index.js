@@ -3,7 +3,7 @@ import ImagesApiService from './js_components/fetchImages';
 import { Notify } from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.throttle';
 
 const imagesApiService = new ImagesApiService();
 
@@ -23,12 +23,27 @@ let lightbox = new SimpleLightbox('.gallery a', {
 refs.form.addEventListener('submit', onSubmit);
 
 function onSubmit(e) {
-  window.addEventListener('scroll', throttle(loadMoreImagesOnScroll, 1000));
   e.preventDefault();
+
+  const inputData = refs.input.value.trim();
+
+  if (inputData === '') {
+    return;
+  }
+
+  window.addEventListener(
+    'scroll',
+    debounce(loadMoreImagesOnScroll, 1600, {
+      leading: false,
+      trailing: true,
+    }),
+  );
+
   clearGallery();
   imagesApiService.resetPage();
-  imagesApiService.query = refs.input.value;
+  imagesApiService.query = inputData;
   imagesApiService.getImages().then(image => {
+    Notify.success(`Hooray! We found ${image.data.totalHits} images.`);
     noImagesFoundNotification(image);
     appendCardMarkUp(image.data.hits);
     lightbox.refresh();
@@ -36,7 +51,7 @@ function onSubmit(e) {
 }
 
 function loadMoreImagesOnScroll() {
-  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10) {
+  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1) {
     imagesApiService.getImages().then(image => {
       endOfImagesNotification(image);
       appendCardMarkUp(image.data.hits);
@@ -86,7 +101,6 @@ function clearGallery() {
 
 function endOfImagesNotification(image) {
   if (image.data.hits.length === 0) {
-    window.removeEventListener('scroll', throttle(loadMoreImagesOnScroll, 1000));
     return Notify.warning("We're sorry, but you've reached the end of search results.");
   }
 }
