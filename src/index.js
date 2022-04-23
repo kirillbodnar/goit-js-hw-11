@@ -33,7 +33,7 @@ function onSubmit(e) {
 
   window.addEventListener(
     'scroll',
-    debounce(loadMoreImagesOnScroll, 1600, {
+    debounce(loadMoreImagesOnScroll, 2000, {
       leading: false,
       trailing: true,
     }),
